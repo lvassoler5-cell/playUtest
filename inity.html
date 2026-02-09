@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>PlayU – Perfil</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { height: 100vh; background: #000; color: #fff; display: flex; overflow: hidden; }
+
+        /* Sidebar */
+        nav {
+            width: 260px; background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255,255,255,0.1); display: flex;
+            flex-direction: column; padding: 40px 20px; z-index: 100;
+        }
+        .logo-area { margin-bottom: 50px; padding-left: 15px; cursor: pointer; }
+        .logo-area img { height: 45px; }
+        .nav-links { list-style: none; flex: 1; }
+        .nav-links li { 
+            padding: 14px 18px; border-radius: 12px; margin-bottom: 8px;
+            cursor: pointer; display: flex; align-items: center; gap: 15px;
+            color: #888; transition: 0.3s; font-weight: 500;
+        }
+        .nav-links li:hover, .nav-links li.active { background: rgba(74, 163, 255, 0.1); color: #4aa3ff; }
+        .logout-item { color: #ff4a4a !important; margin-top: auto; }
+
+        /* Main Content */
+        main { flex: 1; overflow-y: auto; background: #080808; position: relative; scroll-behavior: smooth; }
+
+        /* --- BOTÃO VOLTAR --- */
+        .btn-back-community {
+            position: absolute; top: 30px; left: 30px; background: rgba(0,0,0,0.6);
+            padding: 12px 20px; border-radius: 30px; cursor: pointer;
+            border: 1px solid rgba(74, 163, 255, 0.3); font-size: 13px; font-weight: 600;
+            backdrop-filter: blur(10px); transition: 0.3s; z-index: 1000;
+            display: none; align-items: center; gap: 8px; color: #fff;
+        }
+        .btn-back-community:hover { background: #4aa3ff; border-color: #fff; transform: scale(1.05); }
+
+        /* Banner */
+        .hero-banner { position: relative; height: 450px; width: 100%; overflow: hidden; }
+        .hero-banner img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7); }
+        .banner-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(8, 8, 8, 0.4) 50%, #080808 100%);
+        }
+        .edit-banner-btn {
+            position: absolute; top: 30px; right: 30px; background: rgba(0,0,0,0.6);
+            padding: 12px 20px; border-radius: 30px; cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.2); font-size: 13px; font-weight: 600;
+            backdrop-filter: blur(10px); transition: 0.3s; z-index: 5; display: none;
+        }
+
+        /* Profile Layout */
+        .profile-wrapper { max-width: 1200px; margin: -180px auto 0; padding: 0 50px 100px; position: relative; }
+        .profile-header-main { display: flex; align-items: flex-end; gap: 35px; margin-bottom: 50px; }
+        
+        .avatar-container { 
+            position: relative; width: 200px; height: 200px; flex-shrink: 0; 
+            background: #1a1a1a; border-radius: 20px; overflow: visible; 
+        }
+
+        #profile-img { 
+            width: 100%; height: 100%; object-fit: cover; border-radius: 20px; 
+            border: 4px solid #111; box-shadow: 0 20px 40px rgba(0,0,0,0.5); display: block;
+        }
+
+        .avatar-edit {
+            position: absolute; bottom: -10px; right: -10px; background: #4aa3ff;
+            width: 40px; height: 40px; border-radius: 12px; display: none;
+            align-items: center; justify-content: center; cursor: pointer; border: 4px solid #080808; z-index: 10;
+        }
+
+        .user-identity { flex: 1; }
+        .user-identity h1 { font-size: 64px; line-height: 1; margin-bottom: 10px; }
+        .user-badge {
+            display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05);
+            padding: 8px 16px; border-radius: 30px; font-size: 13px; color: #aaa; border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Área Social */
+        .social-area {
+            margin-top: 25px; display: none; 
+            flex-direction: column; gap: 15px;
+        }
+        .social-stats { display: flex; gap: 30px; }
+        .stat-box { display: flex; flex-direction: column; }
+        .stat-num { font-size: 18px; font-weight: 800; color: #fff; }
+        .stat-label { font-size: 11px; color: #888; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+
+        .social-buttons { display: flex; gap: 15px; }
+        .btn-social {
+            padding: 10px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;
+            transition: 0.3s; display: flex; align-items: center; gap: 8px; border: none;
+        }
+        .btn-follow { background: #4aa3ff; color: #fff; }
+        .btn-follow:hover { background: #338fe8; }
+        .btn-follow.following { background: #1f1f1f; color: #aaa; border: 1px solid #333; }
+        .btn-follow.following:hover { border-color: #ff4a4a; color: #ff4a4a; }
+        
+        .btn-msg { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; }
+        .btn-msg:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+
+        /* Dados e Bio */
+        .data-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.1); border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-top: 40px; }
+        .data-item { background: #0f0f0f; padding: 35px; display: flex; flex-direction: column; gap: 10px; }
+        .data-item i { color: #4aa3ff; font-size: 20px; }
+        .data-item label { font-size: 11px; text-transform: uppercase; color: #555; font-weight: 800; }
+        .data-item span { font-size: 16px; color: #eee; font-weight: 600; }
+        .bio-container { margin-top: 30px; background: rgba(255,255,255,0.02); border-radius: 24px; padding: 30px; border: 1px solid rgba(255,255,255,0.05); }
+        .bio-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .bio-header label { font-size: 12px; font-weight: 800; text-transform: uppercase; color: #4aa3ff; letter-spacing: 1px; }
+        .bio-actions { display: flex; gap: 18px; align-items: center; }
+        .bio-actions i { cursor: pointer; color: #555; transition: 0.3s; font-size: 16px; }
+        .bio-actions i:hover { color: #4aa3ff; }
+        .bio-display { font-size: 16px; line-height: 1.6; color: #ccc; word-wrap: break-word; }
+        .bio-display img { height: 1.4em; width: auto; vertical-align: middle; display: inline-block; margin: 0 4px; border-radius: 3px; }
+        #bio-text { width: 100%; background: #111; border: 1px solid #222; color: #ccc; font-size: 16px; line-height: 1.6; resize: none; min-height: 150px; padding: 15px; border-radius: 15px; outline: none; display: none; margin-bottom: 15px; }
+        
+        /* Modal & Toast */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.4s; z-index: 10000; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .customize-container { display: flex; gap: 30px; width: 95%; max-width: 1100px; height: 80vh; }
+        .modal-content { background: #111; border: 1px solid #222; padding: 30px; border-radius: 30px; flex: 1; overflow-y: auto; }
+        .preview-box { width: 400px; background: #0a0a0a; border: 1px solid #222; border-radius: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; position: relative; overflow: hidden; }
+        
+        /* Botões do Modal */
+        .btn { padding: 18px; border-radius: 15px; border: none; font-weight: 700; cursor: pointer; width: 100%; transition: 0.3s; text-align: center; }
+        .btn-primary { background: #4aa3ff; color: #fff; }
+        .btn-secondary { background: #1a1a1a; color: #fff; border: 1px solid #333; }
+        .btn-danger { background: #ff4a4a; color: #fff; }
+
+        .toast-container { position: fixed; top: 40px; right: 40px; z-index: 20000; }
+        .toast { background: #1a1a1a; border: 1px solid #333; padding: 20px 30px; border-radius: 15px; color: #fff; transform: translateX(150%); transition: 0.5s; }
+        .toast.show { transform: translateX(0); }
+        .text-gradient { background-clip: text !important; -webkit-background-clip: text !important; color: transparent !important; }
+        #banner-input, #profile-input, #bio-file-input { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <nav>
+        <div class="logo-area" onclick="window.location.href='home.html'"><img src="./assets/images/imagelogo.png" alt="PlayU"></div>
+        <ul class="nav-links">
+            <li id="menu-me" onclick="goToMyProfile()"><i class="fa-solid fa-ghost"></i> Meu Perfil</li>
+            <li onclick="window.location.href='cont.html'"><i class="fa-solid fa-fire"></i> Comunidade</li>
+            <li><i class="fa-solid fa-gamepad"></i> Biblioteca</li>
+            <li class="logout-item" id="btn-logout-trigger"><i class="fa-solid fa-power-off"></i> Sair</li>
+        </ul>
+    </nav>
+
+    <main>
+        <div id="back-to-community" class="btn-back-community" onclick="window.location.href='cont.html'">
+            <i class="fa-solid fa-arrow-left"></i> Voltar para a Comunidade
+        </div>
+
+        <section class="hero-banner">
+            <img id="user-banner" src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070&auto=format&fit=crop">
+            <div class="banner-overlay"></div>
+            <label for="banner-input" class="edit-banner-btn" id="edit-banner-label"><i class="fa-solid fa-image"></i> Editar Capa</label>
+            <input type="file" id="banner-input" accept="image/*">
+        </section>
+
+        <div class="profile-wrapper">
+            <div class="profile-header-main">
+                <div class="avatar-container">
+                    <img id="profile-img" src="https://api.dicebear.com/7.x/shapes/svg?seed=user">
+                    <label for="profile-input" class="avatar-edit" id="avatar-edit-label"><i class="fa-solid fa-pen"></i></label>
+                    <input type="file" id="profile-input" accept="image/*">
+                </div>
+                
+                <div class="user-identity">
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <h1 id="user-nick-title">Nickname</h1>
+                        <i class="fa-solid fa-wand-magic-sparkles" id="open-customize" style="font-size: 24px; cursor: pointer; color: #4aa3ff; display: none;"></i>
+                    </div>
+                    <div class="user-badge"><i class="fa-solid fa-circle-check" style="color: #4aff8a;"></i> Usuário Verificado</div>
+
+                    <div id="social-area-container" class="social-area">
+                        <div class="social-stats">
+                            <div class="stat-box">
+                                <span class="stat-num" id="count-followers">0</span>
+                                <span class="stat-label">Seguidores</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-num" id="count-following">0</span>
+                                <span class="stat-label">Seguindo</span>
+                            </div>
+                        </div>
+                        <div class="social-buttons" id="social-buttons-area">
+                            <button id="btn-follow-action" class="btn-social btn-follow">
+                                <i class="fa-solid fa-plus"></i> Seguir
+                            </button>
+                            <button class="btn-social btn-msg" onclick="alert('Sistema de chat em breve!')">
+                                <i class="fa-regular fa-envelope"></i> Mensagem
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data-strip">
+                <div class="data-item"><i class="fa-solid fa-hashtag"></i><label>Nickname</label><span id="info-nick">---</span></div>
+                <div class="data-item"><i class="fa-solid fa-envelope"></i><label>E-mail</label><span id="info-email">---</span></div>
+                <div class="data-item"><i class="fa-solid fa-calendar"></i><label>Desde</label><span id="info-date">---</span></div>
+                <div class="data-item"><i class="fa-solid fa-fingerprint"></i><label>ID Global</label><span id="info-id">#0000</span></div>
+            </div>
+
+            <div class="bio-container">
+                <div class="bio-header">
+                    <label>Sobre Mim</label>
+                    <div class="bio-actions" id="bio-actions-area">
+                        <i class="fa-solid fa-link" id="add-link-btn" title="Inserir link de GIF/Imagem" style="display: none;"></i>
+                        <label for="bio-file-input" id="label-bio-file" style="display: none; cursor: pointer;">
+                            <i class="fa-solid fa-file-arrow-up" title="Subir do Computador"></i>
+                        </label>
+                        <input type="file" id="bio-file-input" accept="image/*">
+                        <i class="fa-solid fa-pen-to-square" id="edit-bio-btn" style="display: none;"></i>
+                    </div>
+                </div>
+                <div id="bio-display-area" class="bio-display">Escreva algo incrível...</div>
+                <textarea id="bio-text" placeholder="Escreva seu texto..."></textarea>
+                <button id="save-bio-btn" class="btn btn-primary" style="display: none; padding: 10px; font-size: 14px; width: auto; margin-top: 10px;">Salvar Bio</button>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="modal-logout">
+        <div style="background: #111; border: 1px solid #222; padding: 40px; border-radius: 30px; width: 90%; max-width: 420px; text-align: center;">
+            <i class="fa-solid fa-circle-exclamation" style="font-size: 50px; color: #ff4a4a; margin-bottom: 20px;"></i>
+            <h2 style="margin-bottom: 10px; font-size: 24px;">Deseja sair?</h2>
+            <p style="color: #666; margin-bottom: 30px; font-size: 14px; line-height: 1.5;">Você será desconectado da sua conta e precisará fazer login novamente para acessar o PlayU.</p>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn btn-secondary" id="close-logout">Cancelar</button>
+                <button class="btn btn-danger" id="confirm-logout">Sair do Perfil</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-customize">
+        <div class="customize-container">
+            <div class="modal-content">
+                <h2 style="margin-bottom: 5px;">Estilo do Nome</h2>
+                <div class="font-grid" id="font-list-container"></div>
+                <div style="background: #1a1a1a; padding: 20px; border-radius: 20px; margin-top: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <label>Gradiente Animado</label><input type="checkbox" id="enable-grad">
+                    </div>
+                    <div id="single-color-area"><input type="color" id="color-1" value="#ffffff" style="width: 100%; height: 40px; border: none; cursor: pointer;"></div>
+                    <div id="multi-color-area" style="display: none; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                        <input type="color" id="g-color-1" value="#ffffff"><input type="color" id="g-color-2" value="#4aa3ff"><input type="color" id="g-color-3" value="#4aa3ff"><input type="color" id="g-color-4" value="#000000">
+                    </div>
+                    <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+                        <label>Contorno (Stroke)</label><input type="checkbox" id="enable-stroke">
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="save-style" style="margin-top: 20px;">Salvar Estilo</button>
+                <p id="close-customize" style="text-align: center; margin-top: 15px; cursor: pointer; color: #555; font-size: 13px;">Cancelar</p>
+            </div>
+            <div class="preview-box"><div id="preview-nick">Preview</div></div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const profileId = urlParams.get('id');
+        const loggedEmail = localStorage.getItem('playu_current_user');
+        const users = JSON.parse(localStorage.getItem('playu_db') || "[]");
+        const fontsList = ['Inter', 'Orbitron', 'Russo One', 'Press Start 2P', 'Righteous', 'Permanent Marker', 'Pacifico', 'Nosifer', 'Silkscreen', 'Poppins', 'Bebas Neue', 'Fredoka One', 'Luckiest Guy', 'Alfa Slab One', 'Monoton', 'Lobster', 'Anton', 'Bangers', 'Syncopate', 'Teko', 'Comfortaa', 'Cinzel', 'Acme', 'Staatliches', 'Creepster', 'Special Elite', 'Dancing Script', 'Abel', 'Satisfy', 'Archivo Black', 'Kalam', 'Jura', 'Kaushan Script', 'Michroma', 'Notable', 'Pathway Gothic One', 'Varela Round', 'Amatic SC', 'Caveat', 'Great Vibes'];
+
+        let user = profileId ? users.find(u => String(u.id) === profileId) : users.find(u => u.email === loggedEmail);
+        let loggedUserObj = users.find(u => u.email === loggedEmail);
+
+        if (!user) { window.location.href = "index.html"; }
+
+        const isOwner = user.email === loggedEmail;
+        const userIndex = users.findIndex(u => u.email === user.email);
+        const loggedUserIndex = users.findIndex(u => u.email === loggedEmail);
+
+        if(!user.followers) user.followers = [];
+        if(!user.following) user.following = [];
+        if(loggedUserObj && !loggedUserObj.following) loggedUserObj.following = [];
+
+        function showToast(msg) {
+            const container = document.getElementById('toast-container');
+            const t = document.createElement('div'); t.className = 'toast'; t.innerText = msg;
+            container.appendChild(t);
+            setTimeout(() => t.classList.add('show'), 100);
+            setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 500); }, 3000);
+        }
+
+        function formatBio(text) {
+            if (!text || text.trim() === "") return "Escreva algo incrível...";
+            const imgRegex = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp|svg)|data:image\/[a-zA-Z]*;base64,[^\s]*)/gi;
+            return text.replace(imgRegex, (match) => `<img src="${match}">`);
+        }
+
+        function applyStyleToEl(el, s) {
+            if (!s) return;
+            el.innerText = user.nickname;
+            el.style.fontFamily = s.font;
+            if (s.isGrad) {
+                el.classList.add('text-gradient');
+                el.style.background = `linear-gradient(90deg, ${s.gc1}, ${s.gc2}, ${s.gc3}, ${s.gc4})`;
+            } else {
+                el.classList.remove('text-gradient');
+                el.style.color = s.c1; el.style.background = "none";
+            }
+            el.style.webkitTextStroke = s.hasStroke ? "0.8px white" : "0px transparent";
+        }
+
+        function loadUserData() {
+            document.getElementById('user-nick-title').innerText = user.nickname;
+            document.getElementById('info-nick').innerText = user.nickname;
+            document.getElementById('info-email').innerText = user.email;
+            document.getElementById('info-id').innerText = "#" + String(user.id || 0).padStart(4, '0');
+            document.getElementById('bio-display-area').innerHTML = formatBio(user.bio);
+            
+            const defaultPic = "https://api.dicebear.com/7.x/shapes/svg?seed=" + user.nickname;
+            document.getElementById('profile-img').src = user.profilePic || defaultPic;
+            if (user.bannerPic) document.getElementById('user-banner').src = user.bannerPic;
+            applyStyleToEl(document.getElementById('user-nick-title'), user.customStyle);
+            
+            document.getElementById('social-area-container').style.display = 'flex';
+            
+            if (isOwner) {
+                document.querySelectorAll('#edit-banner-label, #avatar-edit-label, #open-customize, #edit-bio-btn').forEach(el => el.style.display = 'flex');
+                document.getElementById('social-buttons-area').style.display = 'none';
+            } else {
+                document.getElementById('back-to-community').style.display = 'flex';
+            }
+            updateSocialUI();
+        }
+
+        function updateSocialUI() {
+            document.getElementById('count-followers').innerText = user.followers.length;
+            document.getElementById('count-following').innerText = user.following.length;
+
+            if (!isOwner && loggedUserObj) {
+                const btnFollow = document.getElementById('btn-follow-action');
+                const isFollowing = user.followers.includes(loggedUserObj.id);
+                if (isFollowing) {
+                    btnFollow.innerHTML = `<i class="fa-solid fa-check"></i> Seguindo`;
+                    btnFollow.classList.add('following');
+                } else {
+                    btnFollow.innerHTML = `<i class="fa-solid fa-plus"></i> Seguir`;
+                    btnFollow.classList.remove('following');
+                }
+            }
+        }
+
+        document.getElementById('btn-follow-action').onclick = () => {
+            if (!loggedUserObj) return;
+            const myId = loggedUserObj.id;
+            const targetId = user.id;
+            const idx = user.followers.indexOf(myId);
+
+            if (idx === -1) {
+                user.followers.push(myId);
+                loggedUserObj.following.push(targetId);
+                showToast(`Você agora segue ${user.nickname}`);
+            } else {
+                user.followers.splice(idx, 1);
+                const myIdx = loggedUserObj.following.indexOf(targetId);
+                if (myIdx !== -1) loggedUserObj.following.splice(myIdx, 1);
+                showToast(`Deixou de seguir ${user.nickname}`);
+            }
+
+            users[userIndex] = user;
+            users[loggedUserIndex] = loggedUserObj;
+            localStorage.setItem('playu_db', JSON.stringify(users));
+            updateSocialUI();
+        };
+
+        function goToMyProfile() {
+            const me = users.find(u => u.email === loggedEmail);
+            window.location.href = `inity.html?id=${me.id}`;
+        }
+
+        // --- LÓGICA DE LOGOUT PERSONALIZADO ---
+        const modalLogout = document.getElementById('modal-logout');
+        document.getElementById('btn-logout-trigger').onclick = () => modalLogout.classList.add('active');
+        document.getElementById('close-logout').onclick = () => modalLogout.classList.remove('active');
+        document.getElementById('confirm-logout').onclick = () => {
+            localStorage.removeItem('playu_logged_in');
+            window.location.href = "index.html";
+        };
+
+        // --- CUSTOMIZAÇÃO ---
+        let tempStyle = user.customStyle || { font: 'Inter', c1: '#ffffff', isGrad: false, gc1:'#ffffff', gc2:'#4aa3ff', gc3:'#4aa3ff', gc4:'#000000' };
+        const previewEl = document.getElementById('preview-nick');
+        function updatePreview() { applyStyleToEl(previewEl, tempStyle); }
+
+        if (isOwner) {
+            const fontContainer = document.getElementById('font-list-container');
+            fontsList.forEach(f => {
+                const opt = document.createElement('div');
+                opt.className = 'font-opt';
+                opt.style.fontFamily = f;
+                opt.innerText = f;
+                opt.onclick = () => {
+                    document.querySelectorAll('.font-opt').forEach(x => x.classList.remove('selected'));
+                    opt.classList.add('selected');
+                    tempStyle.font = f;
+                    updatePreview();
+                };
+                fontContainer.appendChild(opt);
+            });
+            document.getElementById('enable-grad').onchange = (e) => {
+                tempStyle.isGrad = e.target.checked;
+                document.getElementById('multi-color-area').style.display = e.target.checked ? 'grid' : 'none';
+                document.getElementById('single-color-area').style.display = e.target.checked ? 'none' : 'block';
+                updatePreview();
+            };
+            document.getElementById('color-1').oninput = (e) => { tempStyle.c1 = e.target.value; updatePreview(); };
+            document.querySelectorAll('#multi-color-area input').forEach((inp, i) => {
+                inp.oninput = (e) => { tempStyle[`gc${i+1}`] = e.target.value; updatePreview(); };
+            });
+            document.getElementById('enable-stroke').onchange = (e) => { tempStyle.hasStroke = e.target.checked; updatePreview(); };
+            document.getElementById('save-style').onclick = () => {
+                user.customStyle = {...tempStyle};
+                users[userIndex] = user;
+                localStorage.setItem('playu_db', JSON.stringify(users));
+                location.reload();
+            };
+            document.getElementById('edit-bio-btn').onclick = () => {
+                document.getElementById('bio-display-area').style.display = 'none';
+                document.getElementById('bio-text').style.display = 'block';
+                document.getElementById('save-bio-btn').style.display = 'block';
+                document.getElementById('bio-text').value = user.bio || "";
+                document.getElementById('add-link-btn').style.display = 'block';
+                document.getElementById('label-bio-file').style.display = 'block';
+            };
+            document.getElementById('save-bio-btn').onclick = () => {
+                user.bio = document.getElementById('bio-text').value;
+                users[userIndex] = user;
+                localStorage.setItem('playu_db', JSON.stringify(users));
+                location.reload();
+            };
+            const handleUpload = (e, field, imgId) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        user[field] = ev.target.result;
+                        users[userIndex] = user;
+                        localStorage.setItem('playu_db', JSON.stringify(users));
+                        document.getElementById(imgId).src = ev.target.result;
+                        showToast("Imagem atualizada!");
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            document.getElementById('banner-input').onchange = (e) => handleUpload(e, 'bannerPic', 'user-banner');
+            document.getElementById('profile-input').onchange = (e) => handleUpload(e, 'profilePic', 'profile-img');
+            document.getElementById('bio-file-input').onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => { document.getElementById('bio-text').value += ` ${ev.target.result} `; showToast("Mídia adicionada!"); };
+                    reader.readAsDataURL(file);
+                }
+            };
+            document.getElementById('add-link-btn').onclick = () => {
+                const url = prompt("Link da imagem/GIF:");
+                if (url) document.getElementById('bio-text').value += ` ${url} `;
+            };
+        }
+
+        document.getElementById('open-customize').onclick = () => { document.getElementById('modal-customize').classList.add('active'); updatePreview(); };
+        document.getElementById('close-customize').onclick = () => document.getElementById('modal-customize').classList.remove('active');
+
+        loadUserData();
+    </script>
+</body>
+</html>
