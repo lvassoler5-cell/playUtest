@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PlayU – Login</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init("aDR6-sRREq1mRVszy");
+   })();
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+body { height: 100vh; background: #0e1418; color: #fff; overflow: hidden; }
+
+/* BACKGROUND */
+.background { position: absolute; inset: 0; background: url("https://github.com/user-attachments/assets/77d7621b-cddd-43ac-85cd-dc90596de965") center / cover no-repeat; filter: brightness(1.2); z-index: -2; }
+.overlay { position: absolute; inset: 0; background: linear-gradient( 90deg, rgba(0,0,0,.7) 0%, rgba(0,0,0,.5) 50%, rgba(0,0,0,.35) 100% ); z-index: -1; }
+
+/* LOGO & TITLE */
+.logo { position: absolute; top: -35px; left: -12px; }
+.logo img { height: 168px; }
+.title { position: absolute; left: 150px; top: 35%; transform: translateY(-55%); }
+.title img { width: 520px; }
+
+/* CARDS */
+.cards { position: absolute; bottom: 20px; left: 32px; display: flex; gap: 13px; perspective: 1000px; }
+.card { position: relative; overflow: visible; height: 200px; border-radius: 15px; background-size: cover; background-position: center; border: 1px solid rgba(255,255,255,.25); backdrop-filter: blur(8px); box-shadow: -18px 22px 35px rgba(0,0,0,.55); transition: width .25s ease, transform .25s ease; transform-style: preserve-3d; }
+.card::after { content: ""; position: absolute; inset: -3px; border-radius: 18px; border: 1.5px solid rgba(255,255,255,0.85); opacity: 0; transition: all .25s ease; pointer-events: none; }
+.card:hover { transform: scale(1.05); }
+.card:hover::after { opacity: 1; }
+.card:nth-child(1) { width: 357px; background-image: url("https://github.com/user-attachments/assets/378e6f3d-0922-4089-a2cd-4b7343ea2646"); }
+.card:nth-child(2) { width: 317px; background-image: url("https://github.com/user-attachments/assets/8c2a53d7-8f6d-41f6-9d0a-66eae69899a9"); }
+.card:nth-child(3) { width: 130px; background-image: url("https://github.com/user-attachments/assets/89cdbf96-1223-42b4-86d3-a38497495eb7"); }
+
+/* PANEL */
+.panel { position: absolute; right: 13px; top: 50%; transform: translateY(-50%); width: 628px; height: 827px; border-radius: 38px; border-top-right-radius: 0; backdrop-filter: blur(22px); background: rgba(0, 0, 0, 0.08); border: 1px solid rgba(255,255,255,.28); display: flex; justify-content: center; }
+.panel::after { content: ""; position: absolute; inset: 0; border-radius: 38px; border-top-right-radius: 0; box-shadow: 28px 32px 70px rgba(0,0,0,0.75), 12px 14px 28px rgba(0,0,0,0.55); z-index: -1; }
+.panel-content { width: 100%; max-width: 440px; margin-top: 180px; }
+.panel-content h2 { font-size: 42px; margin-bottom: 42px; text-align: center; transform: translateY(-70px); }
+
+/* INPUTS */
+.field { position: relative; margin-bottom: 79px; }
+.field input { width: 100%; background: none; border: none; border-bottom: 1px solid rgba(255,255,255,.45); padding: 14px 0 10px; font-size: 16px; color: #fff; outline: none; }
+.field label { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 21px; opacity: .8; pointer-events: none; transition: all .35s ease; }
+.field:hover label, .field input:focus + label, .field input:not(:placeholder-shown) + label { top: -8px; left: 0; transform: translate(0, 0); font-size: 14px; opacity: .65; }
+.field input:focus { border-bottom-color: #4aa3ff; }
+
+/* CHECKBOX */
+.checkbox-wrapper-46 { margin-top: -20px; display: flex; align-items: center; }
+.checkbox-wrapper-46 input[type="checkbox"] { display: none; visibility: hidden; }
+.checkbox-wrapper-46 .cbx { margin: auto; user-select: none; cursor: pointer; display: flex; align-items: center; }
+.checkbox-wrapper-46 .cbx span { display: inline-block; vertical-align: middle; transform: translate3d(0, 0, 0); }
+.checkbox-wrapper-46 .cbx span:first-child { position: relative; width: 23px; height: 23px; border-radius: 3px; border: 1px solid #9098a9; transition: all 0.2s ease; }
+.checkbox-wrapper-46 .cbx span:first-child svg { position: absolute; top: 5px; left: 4px; fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 16px; stroke-dashoffset: 16px; transition: all 0.3s ease; transition-delay: 0.1s; }
+.checkbox-wrapper-46 .cbx span:last-child { padding-left: 12px; font-size: 20px; color: #ffffff; }
+.checkbox-wrapper-46 .inp-cbx:checked + .cbx span:first-child { background: #4aa3ff; border-color: #4aa3ff; animation: wave-46 0.4s ease; }
+.checkbox-wrapper-46 .inp-cbx:checked + .cbx span:first-child svg { stroke-dashoffset: 0; }
+.terms-link { color: #4aa3ff; text-decoration: none; }
+
+@keyframes wave-46 { 50% { transform: scale(0.9); } }
+
+button { width: 581px; height: 61px; margin-top: 100px; margin-left: -70px; border-radius: 50px; border: none; font-size: 18px; font-weight: 600; color: #ffffff; cursor: pointer; background-color: #4aa3ff; position: relative; overflow: visible; }
+button::after { content: ""; position: absolute; inset: -2px; border-radius: 60px; border: 1.5px solid rgba(255,255,255,0.8); opacity: 0; transition: all .25s ease; }
+button:hover::after { opacity: 1; }
+
+.glass-bar { position: absolute; left: 0; top: 630px; width: 913px; height: 206px; background: rgba(212, 212, 212, 0.01); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 0; pointer-events: none; }
+
+/* NOTIFICAÇÃO */
+#steam-notification { 
+    position: fixed; bottom: 40px; right: -450px; width: 380px; 
+    background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15); padding: 18px; display: flex; align-items: center; gap: 18px; 
+    border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); z-index: 9999; 
+    transition: all 0.7s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+#steam-notification.show { right: 40px; }
+.steam-icon { width: 60px; height: 60px; flex-shrink: 0; background: linear-gradient(135deg, rgba(74, 163, 255, 0.2), rgba(74, 163, 255, 0.05)); border-radius: 18px; display: flex; justify-content: center; align-items: center; border: 1px solid rgba(74, 163, 255, 0.3); }
+.steam-icon img { width: 38px; height: 38px; object-fit: contain; }
+.steam-text { font-size: 14px; color: #fff; line-height: 1.5; }
+.steam-text b { color: #4aa3ff; font-size: 12px; display: block; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
+
+html, body, div, span, p, h1, h2, h3, h4, h5, h6, label, a, img, button { -webkit-user-select: none !important; user-select: none !important; }
+input, textarea { -webkit-user-select: text !important; user-select: text !important; }
+img { -webkit-user-drag: none; pointer-events: none; }
+
+/* ADICIONANDO COMPATIBILIDADE MOBILE SEM ALTERAR O DESIGN ORIGINAL */
+@media (max-width: 768px) {
+    body { overflow-y: auto; height: auto; min-height: 100vh; }
+    .title, .cards, .glass-bar { display: none; } /* Oculta decorativos que quebram o mobile */
+    .panel { 
+        position: relative; 
+        right: 0; top: 0; 
+        transform: none; 
+        width: 95%; 
+        max-width: 440px; 
+        height: auto; 
+        margin: 80px auto 40px; 
+        padding: 40px 20px; 
+        border-radius: 24px;
+        border-top-right-radius: 24px;
+    }
+    .panel-content { margin-top: 60px; }
+    .panel-content h2 { transform: none; font-size: 32px; margin-bottom: 30px; }
+    button { 
+        width: 100%; 
+        margin-left: 0; 
+        margin-top: 40px; 
+    }
+    .logo img { height: 100px; }
+    #steam-notification { width: 90%; right: -110%; }
+    #steam-notification.show { right: 5%; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="background"></div>
+<div class="overlay"></div>
+<div class="glass-bar"></div>
+
+<div id="steam-notification">
+    <div class="steam-icon"><img src="https://github.com/user-attachments/assets/b7e82b6e-0dbd-4891-a57c-31bc003d435a"></div>
+    <div class="steam-text"><b id="steam-title">PLAYU SYSTEM</b><span id="steam-msg">Message content...</span></div>
+</div>
+
+<div class="logo"><img src="https://github.com/user-attachments/assets/b7e82b6e-0dbd-4891-a57c-31bc003d435a"></div>
+<div class="title"><img src="https://github.com/user-attachments/assets/ad2f4e84-46a8-4de0-ad25-7813312026f6"></div>
+<div class="cards"><div class="card"></div><div class="card"></div><div class="card"></div></div>
+
+<div class="panel">
+  <div class="panel-content">
+    <h2 id="panel-title">Start your journey!</h2>
+
+    <div id="step-1">
+        <div class="field">
+          <input id="input-nick" placeholder=" " autocomplete="off">
+          <label>Enter your nickname</label>
+        </div>
+        <div class="field">
+          <input id="input-email" type="email" placeholder=" " autocomplete="off">
+          <label>Enter your email</label>
+        </div>
+        <div class="field">
+          <input id="input-pass" type="password" placeholder=" " autocomplete="off">
+          <label>Enter your password</label>
+        </div>
+
+        <div class="checkbox-wrapper-46">
+          <input type="checkbox" id="cbx" class="inp-cbx" />
+          <label for="cbx" class="cbx">
+            <span>
+              <svg viewBox="0 0 12 10" height="10px" width="12px">
+                <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+              </svg>
+            </span>
+            <span>Concordar com os termos <a href="#" class="terms-link">PlayU</a></span>
+          </label>
+        </div>
+
+      <button id="btn-join">Join PlayU</button>
+    </div>
+
+    <div id="step-2" style="display: none;">
+        <div class="field" style="margin-top: 50px;">
+            <input id="input-code" type="text" placeholder=" " maxlength="6" style="text-align: center; letter-spacing: 5px;">
+            <label style="left: 50%; transform: translate(-50%, -50%);">Security Code</label>
+        </div>
+        <p style="text-align: center; color: rgba(255,255,255,0.6); margin-bottom: 20px;">Enviamos um código para o seu e-mail.</p>
+        <button id="btn-verify">Verify Code</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// SCENES ENGINE
+const scenes = [
+  { background: "https://github.com/user-attachments/assets/77d7621b-cddd-43ac-85cd-dc90596de965", dark: 1.5, title: "https://github.com/user-attachments/assets/ad2f4e84-46a8-4de0-ad25-7813312026f6", titleStyle: { width: "599px", left: "155px", top: "29%" }, cards: ["https://github.com/user-attachments/assets/378e6f3d-0922-4089-a2cd-4b7343ea2646", "https://github.com/user-attachments/assets/8c2a53d7-8f6d-41f6-9d0a-66eae69899a9", "https://github.com/user-attachments/assets/89cdbf96-1223-42b4-86d3-a38497495eb7"] },
+  { background: "https://github.com/user-attachments/assets/24a9d6ba-02d3-4674-b4f6-8955383c6686", dark: 1.0, title: "https://github.com/user-attachments/assets/ce1b0759-b91b-4de5-ab30-0271a95b10cd", titleStyle: { width: "600px", left: "155px", top: "35%" }, cards: ["https://github.com/user-attachments/assets/b561a1fd-8a34-47b5-ad4a-cdb70857dcca", "https://github.com/user-attachments/assets/4d23532b-3da8-4048-bc8b-359b3f59c2be", "https://github.com/user-attachments/assets/e4f353cb-26c7-4427-9173-9bcb759c098d"] },
+  { background: "https://github.com/user-attachments/assets/0d26de8a-3dea-4d07-bddf-63417053b056", dark: 1.2, title: "https://github.com/user-attachments/assets/2fa3d496-0ea9-4b63-9f7b-5c905187e211", titleStyle: { width: "490px", left: "160px", top: "37%" }, cards: ["https://github.com/user-attachments/assets/231f11be-822e-481b-9fc4-909a676a2adb", "https://github.com/user-attachments/assets/03cb9bc0-e94b-43ac-a4bd-a33e5ef17eb7", "https://github.com/user-attachments/assets/ec90eef4-299d-4efc-af82-06b6f6114e50"] }
+];
+let currentScene = 0;
+const background = document.querySelector('.background');
+const titleContainer = document.querySelector('.title');
+const titleImg = document.querySelector('.title img');
+const cardsEls = document.querySelectorAll('.card');
+
+function applyScene(scene) {
+  background.style.background = `url("${scene.background}") center / cover no-repeat`;
+  background.style.filter = `brightness(${scene.dark})`;
+  titleImg.src = scene.title; titleImg.style.width = scene.titleStyle.width; titleContainer.style.left = scene.titleStyle.left; titleContainer.style.top = scene.titleStyle.top;
+  cardsEls.forEach((card, i) => { card.style.backgroundImage = `url("${scene.cards[i]}")`; });
+}
+setInterval(() => { currentScene = (currentScene + 1) % scenes.length; applyScene(scenes[currentScene]); }, 30000);
+applyScene(scenes[0]);
+
+// NOTIFICATION
+function showSteamNotify(title, message) {
+    const notify = document.getElementById('steam-notification');
+    document.getElementById('steam-title').innerText = title.toUpperCase();
+    document.getElementById('steam-msg').innerText = message;
+    notify.classList.add('show');
+    setTimeout(() => { notify.classList.remove('show'); }, 5000);
+}
+
+// LOGIC
+let generatedAuthCode = null;
+
+document.getElementById('btn-join').addEventListener('click', function() {
+    const nick = document.getElementById('input-nick').value.trim();
+    const email = document.getElementById('input-email').value.trim();
+    const pass = document.getElementById('input-pass').value.trim();
+    const terms = document.getElementById('cbx').checked;
+
+    if (!nick || !email || !pass) { showSteamNotify("Ops!", "Preencha todos os campos."); return; }
+    if (!terms) { showSteamNotify("Termos", "Aceite os termos."); return; }
+
+    let users = JSON.parse(localStorage.getItem('playu_db') || "[]");
+    const foundUser = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+
+    if (foundUser) {
+        if (foundUser.password === pass) {
+            showSteamNotify("Segurança", "Enviando código...");
+            generatedAuthCode = Math.floor(100000 + Math.random() * 900000);
+            
+            // Salva o email temporariamente
+            sessionStorage.setItem('pending_email', email);
+
+            const templateParams = {
+                user_name: foundUser.nickname,
+                user_email: foundUser.email,
+                auth_code: generatedAuthCode
+            };
+
+            emailjs.send('service_4u0qvth', 'template_19zorhl', templateParams)
+                .then(function() {
+                    showSteamNotify("E-mail Enviado", "Verifique sua caixa.");
+                    document.getElementById('step-1').style.display = 'none';
+                    document.getElementById('step-2').style.display = 'block';
+                    document.getElementById('panel-title').innerText = "Verify Access";
+                }, function(error) {
+                    showSteamNotify("Erro", "Falha no e-mail.");
+                });
+        } else {
+            showSteamNotify("Erro", "Senha incorreta.");
+        }
+
+    } else {
+        // CADASTRO DIRETO COM ID SEQUENCIAL
+        let users = JSON.parse(localStorage.getItem('playu_db') || "[]");
+        
+        // Calcula o próximo ID baseado no tamanho da lista
+        const nextId = users.length + 1;
+
+        const newUser = { 
+            id: nextId, 
+            nickname: nick, 
+            email: email, 
+            password: pass, 
+            createdAt: new Date().toLocaleDateString('pt-BR') 
+        };
+
+        users.push(newUser);
+        localStorage.setItem('playu_db', JSON.stringify(users));
+        localStorage.setItem('playu_logged_in', "true");
+        localStorage.setItem('playu_current_user', email);
+        
+        showSteamNotify("Bem-vindo", "Redirecionando...");
+        setTimeout(() => window.location.href = "inity.html", 1500);
+    }
+});
+
+document.getElementById('btn-verify').addEventListener('click', () => {
+    const inputCode = document.getElementById('input-code').value.trim();
+    const emailToLogin = sessionStorage.getItem('pending_email');
+
+    if (parseInt(inputCode) === generatedAuthCode) {
+        localStorage.setItem('playu_logged_in', "true");
+        localStorage.setItem('playu_current_user', emailToLogin);
+        
+        showSteamNotify("Sucesso", "Acesso autorizado!");
+        
+        setTimeout(() => { 
+            sessionStorage.removeItem('pending_email');
+            window.location.href = "inity.html"; 
+        }, 1000);
+    } else {
+        showSteamNotify("Erro", "Código incorreto.");
+    }
+});
+</script>
+</body>
+</html>
