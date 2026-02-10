@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>PlayU – Comunidade</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@700&family=Permanent+Marker&family=Playfair+Display:wght@700&family=Roboto+Mono:wght@700&family=Anton&family=Lobster&family=Pacifico&family=Press+Start+2P&family=Righteous&family=Russo+One&family=Syncopate:wght@700&family=Exo+2:wght@700&family=Kanit:wght@700&family=Kaushan+Script&family=Michroma&family=Montserrat:wght@900&family=Nosifer&family=Oswald:wght@700&family=Poppins:wght@900&family=Silkscreen&family=Titillium+Web:wght@900&display=swap" rel="stylesheet">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { height: 100vh; background: #0b0e11; color: #fff; display: flex; overflow: hidden; }
+
+        .bg-blur {
+            position: fixed; inset: 0;
+            background: url("./assets/images/imageback.png") center / cover no-repeat;
+            filter: brightness(0.2) blur(20px); z-index: -1;
+        }
+
+        /* Sidebar */
+        nav {
+            width: 280px; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05); display: flex;
+            flex-direction: column; padding: 30px;
+        }
+        .logo-area { margin-bottom: 50px; cursor: pointer; }
+        .logo-area img { height: 45px; }
+        .nav-links { list-style: none; flex: 1; }
+        .nav-links li { 
+            margin-bottom: 15px; padding: 12px 15px; border-radius: 10px; 
+            cursor: pointer; transition: 0.3s; color: rgba(255,255,255,0.6);
+            display: flex; align-items: center; gap: 12px;
+        }
+        .nav-links li:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
+        .nav-links li.active { background: rgba(74, 163, 255, 0.1); color: #4aa3ff; }
+
+        /* Main Content */
+        main { flex: 1; padding: 60px; overflow-y: auto; }
+        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .page-title { font-size: 28px; font-weight: 700; color: #4aa3ff; }
+
+        /* Barra de Busca */
+        .search-wrapper { position: relative; width: 300px; }
+        .search-wrapper i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.4); }
+        .search-wrapper input { 
+            width: 100%; padding: 12px 12px 12px 45px; border-radius: 8px; 
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; outline: none; transition: 0.3s;
+        }
+        .search-wrapper input:focus { border-color: #4aa3ff; background: rgba(255,255,255,0.08); }
+
+        /* Grid de Usuários */
+        .users-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+        }
+        .user-card {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px; padding: 25px; text-align: center; transition: 0.3s;
+            cursor: pointer; position: relative;
+        }
+        .user-card:hover { 
+            transform: translateY(-5px); 
+            background: rgba(255, 255, 255, 0.06); 
+            border-color: #4aa3ff; 
+            box-shadow: 0 10px 30px rgba(74, 163, 255, 0.1); 
+        }
+        
+        .user-card img {
+            width: 90px; height: 90px; border-radius: 50%; object-fit: cover;
+            margin-bottom: 15px; border: 2px solid rgba(74, 163, 255, 0.3);
+            background: #222;
+        }
+        .user-card h3 { font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; }
+        .user-card .user-id-tag { font-size: 11px; color: #666; font-weight: 700; text-transform: uppercase; }
+
+        .text-gradient { background-clip: text !important; -webkit-background-clip: text !important; color: transparent !important; }
+        
+        /* Scrollbar */
+        main::-webkit-scrollbar { width: 6px; }
+        main::-webkit-scrollbar-thumb { background: #4aa3ff; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-blur"></div>
+
+    <nav>
+        <div class="logo-area" onclick="window.location.href='index.html'">
+            <img src="./assets/images/imagelogo.png" alt="PlayU Logo">
+        </div>
+        <ul class="nav-links">
+            <li id="menu-me">
+                <i class="fa-solid fa-user"></i> Minha Conta
+            </li>
+            <li class="active" onclick="window.location.href='cont.html'">
+                <i class="fa-solid fa-users"></i> Comunidade
+            </li>
+            <li><i class="fa-solid fa-gamepad"></i> Biblioteca</li>
+            <li><i class="fa-solid fa-gear"></i> Preferências</li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="header-flex">
+            <h2 class="page-title">Explorar Comunidade</h2>
+            <div class="search-wrapper">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-input" placeholder="Buscar jogador...">
+            </div>
+        </div>
+
+        <div class="users-grid" id="users-list">
+            </div>
+    </main>
+
+    <script>
+        const users = JSON.parse(localStorage.getItem('playu_db') || "[]");
+        const loggedEmail = localStorage.getItem('playu_current_user');
+        const listContainer = document.getElementById('users-list');
+        const searchInput = document.getElementById('search-input');
+
+        // Configuração do botão "Minha Conta"
+        const loggedUser = users.find(u => u.email === loggedEmail);
+        document.getElementById('menu-me').onclick = () => {
+            if (loggedUser) {
+                window.location.href = `inity.html?id=${loggedUser.id}`;
+            } else {
+                window.location.href = `index.html`;
+            }
+        };
+
+        // Função para renderizar a lista
+        function renderUsers(filter = "") {
+            listContainer.innerHTML = '';
+            
+            const filteredUsers = users.filter(user => 
+                user.nickname.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            filteredUsers.forEach((user) => {
+                const card = document.createElement('div');
+                card.className = 'user-card';
+                card.onclick = () => window.location.href = `inity.html?id=${user.id}`;
+
+                // Lógica de Estilo do Nickname
+                let styleAttr = "";
+                let classAttr = "";
+                
+                if (user.customStyle) {
+                    const s = user.customStyle;
+                    styleAttr += `font-family: '${s.font}', sans-serif;`;
+                    styleAttr += s.hasStroke ? `-webkit-text-stroke: 0.4px white;` : "";
+                    
+                    if (s.isGrad) {
+                        classAttr = "text-gradient";
+                        styleAttr += `background: linear-gradient(90deg, ${s.gc1}, ${s.gc2}, ${s.gc3}, ${s.gc4});`;
+                    } else {
+                        styleAttr += `color: ${s.c1};`;
+                    }
+                }
+
+                const pic = user.profilePic || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+                const displayId = String(user.id || 0).padStart(4, '0');
+
+                card.innerHTML = `
+                    <img src="${pic}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png'">
+                    <h3 class="${classAttr}" style="${styleAttr}">${user.nickname}</h3>
+                    <div class="user-id-tag">ID #${displayId}</div>
+                `;
+                listContainer.appendChild(card);
+            });
+
+            if (filteredUsers.length === 0) {
+                listContainer.innerHTML = `<p style="opacity: 0.5; grid-column: 1/-1; text-align: center; margin-top: 20px;">Nenhum usuário encontrado.</p>`;
+            }
+        }
+
+        // Listener da busca
+        searchInput.addEventListener('input', (e) => {
+            renderUsers(e.target.value);
+        });
+
+        // Inicialização
+        renderUsers();
+    </script>
+</body>
+</html>
